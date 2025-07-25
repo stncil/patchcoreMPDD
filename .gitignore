@@ -1,0 +1,97 @@
+.idea/
+__pycache__/
+LabletAnomaly.egg-info/
+
+# Model files and checkpoints
+*.pth
+*.pt
+*.ckpt
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.safetensors
+
+# Result directories
+results/
+outputs/
+experiments/
+logs/
+runs/
+checkpoints/
+saved_models/
+
+# FastFlow specific results
+fastflow_results/
+fastflow_patch/
+fastflow_wresnet50/
+fastflow_improved/
+fastflow_patchbased/
+
+# PatchCore specific results
+patchcore_results/
+
+# Dataset directories (if large)
+datasets/
+data/
+MPDD/
+MVTec/
+
+# Visualization outputs
+segmentation_images/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+
+# CSV results (optional - uncomment if you don't want to track results)
+# *.csv
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.out
+
+# OS specific files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Python specific
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE specific
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Conda environments
+*.conda
+*.env
+
+# Large data files
+*.npy
+*.npz
+*.mat
+
+# Memory dumps
+*.dmp
+
+# Weights and biases
+wandb/
