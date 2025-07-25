@@ -358,6 +358,9 @@ class FastFlow(nn.Module):
                 anomaly_maps_list = []
                 
                 for i, (patch_output, patch_shapes) in enumerate(zip(patch_outputs, patch_shapes_list)):
+                    # Move patch output back to GPU for computation
+                    patch_output = patch_output.to(self.device)
+                    
                     # Compute patch-level anomaly scores
                     patch_log_prob = -torch.mean(patch_output**2, dim=(2, 3, 4)) * 0.5
                     patch_scores = -patch_log_prob  # Convert to anomaly scores (higher = more anomalous)
@@ -367,11 +370,14 @@ class FastFlow(nn.Module):
                         patch_scores, patch_shapes, (self.input_size, self.input_size)
                     )
                     anomaly_maps_list.append(anomaly_map.unsqueeze(1))  # Add channel dim
+                    
+                    # Clean up intermediate tensors
+                    del patch_output, patch_log_prob, patch_scores, anomaly_map
                 
                 # Combine multi-scale anomaly maps
                 if len(anomaly_maps_list) > 1:
                     # Weight different scales differently
-                    weights = torch.softmax(torch.tensor([2.0, 1.5, 1.0], device=x.device), dim=0)
+                    weights = torch.softmax(torch.tensor([2.0, 1.5, 1.0], device=self.device), dim=0)
                     weights = weights[:len(anomaly_maps_list)]
                     
                     # Weighted combination
