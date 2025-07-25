@@ -32,7 +32,6 @@ fastflow_patchbased/
 patchcore_results/
 
 # Dataset directories (if large)
-datasets/
 data/
 MPDD/
 MVTec/
