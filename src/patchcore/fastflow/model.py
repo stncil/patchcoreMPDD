@@ -183,6 +183,34 @@ class FastFlow(nn.Module):
                 )
             )
         self.input_size = input_size
+        
+        # Initialize device tracking
+        self._device = None
+
+    @property
+    def device(self):
+        """Get the device of the model."""
+        if self._device is None:
+            self._device = next(self.parameters()).device
+        return self._device
+
+    def to(self, device):
+        """Override to method to track device changes."""
+        result = super().to(device)
+        result._device = device if isinstance(device, torch.device) else torch.device(device)
+        return result
+
+    def cuda(self, device=None):
+        """Override cuda method to track device changes."""
+        result = super().cuda(device)
+        result._device = torch.device('cuda', device) if device is not None else torch.device('cuda')
+        return result
+
+    def cpu(self):
+        """Override cpu method to track device changes."""
+        result = super().cpu()
+        result._device = torch.device('cpu')
+        return result
 
     def _extract_features(self, x):
         """Extract features from backbone."""
@@ -312,6 +340,11 @@ class FastFlow(nn.Module):
             x = batch["image"]
         else:
             x = batch
+        
+        # Ensure input is on the same device as the model
+        model_device = self.device
+        if x.device != model_device:
+            x = x.to(model_device)
         
         # Extract features from backbone
         features = self._extract_features(x)
