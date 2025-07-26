@@ -18,7 +18,6 @@ MVTec/
 
 # Visualization outputs
 segmentation_images/
-*.png
 *.jpg
 *.jpeg
 *.gif
