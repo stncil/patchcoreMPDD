@@ -38,18 +38,48 @@ Detailed description in Detailed_README.md
 
 Detailed description in Detailed_README.md
 
-### PatchCore Variants Overview
+### PatchCore Variants Analysis
 
-PatchCore isn’t a one-size-fits-all model.  Over the course of our experiments we found four ‘flavours’ that strike different balances between speed, memory and accuracy.
+#### Available PatchCore Configurations
 
-| Variant | What it is | When to use |
-|---------|------------|-------------|
-| **Standard (IM224_WR50)** | A single WideResNet-50 working on 224 × 224 crops, using a 10 % coreset. | Your everyday choice – quick to train, light on memory and accurate enough for most lines. |
-| **Ensemble (IM224_Ensemble)** | Three backbones (WR-101, ResNext-101, DenseNet-201) joined together. | When every fraction of a percent matters and latency is secondary (e.g. benchmark studies, golden runs). |
-| **High-Res (IM320_WR50)** | Same backbone as the standard model but on 320 × 320 crops and a smaller 1 % coreset. | For tiny defects such as hairline scratches that disappear at lower resolutions. |
-| **Seg-Optimised (IM320_Seg)** | High-res model with a larger 5×5 patch size and 3-NN scoring. | When you need crisp defect masks for downstream measurement or reporting. |
+I have implemented multiple PatchCore variants, each optimized for different scenarios:
 
-In practice we recommend starting with the *Standard* model.  If you notice missed micro-defects, switch to *High-Res* or *Seg-Optimised*.  For maximum KPI numbers (and time to spare) give the *Ensemble* a spin.
+##### 1. **Standard Single Backbone (IM224_WR50)**
+- **Backbone**: WideResNet50
+- **Feature Layers**: layer2 + layer3
+- **Resolution**: 224×224 pixels
+- **Coreset**: 10% sampling
+- **Embedding**: 1024 → 1024 dimensions
+- **Use Case**: General-purpose anomaly detection
+- **Performance**: Balanced speed and accuracy
+
+##### 2. **Ensemble Multi-Backbone (IM224_Ensemble)**
+- **Backbones**: WideResNet101 + ResNext101 + DenseNet201
+- **Feature Layers**: Multiple layer combinations
+- **Resolution**: 224×224 pixels  
+- **Coreset**: 1% sampling (more selective)
+- **Embedding**: 1024 → 384 dimensions (compressed)
+- **Use Case**: Maximum accuracy applications
+- **Trade-off**: Higher computational cost, better performance
+
+##### 3. **High-Resolution Detection (IM320_WR50)**
+- **Backbone**: WideResNet50
+- **Feature Layers**: layer2 + layer3
+- **Resolution**: 320×320 pixels
+- **Coreset**: 1% sampling
+- **Embedding**: 1024 → 1024 dimensions
+- **Use Case**: Detailed defect detection requiring fine-grained analysis
+- **Advantage**: Better detection of small defects
+
+##### 4. **Segmentation-Optimized (IM320_Segmentation)**
+- **Backbone**: WideResNet50
+- **Feature Layers**: layer2 + layer3
+- **Resolution**: 320×320 pixels
+- **Coreset**: 1% sampling
+- **Embedding**: 1024 → 1024 dimensions
+- **Patch Parameters**: patchsize=5, anomaly_scorer_num_nn=3
+- **Use Case**: Precise pixel-level defect localization
+- **Optimization**: Larger neighborhood for smoother segmentation
 
 #### PatchCore Parameter Impact
 
