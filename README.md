@@ -236,3 +236,11 @@ bash sample_evaluation_fastflow_loader.sh
 ```
 ### Credits:
 The repository is adapted from https://github.com/amazon-science/patchcore-inspection
+
+## Sample Heatmap Visualizations
+
+Metal-plate localisation results from each model:
+
+| PatchCore Good | PatchCore Scratches | FastFlow Good | FastFlow Scratches |
+|:--------------:|:-------------------:|:-------------:|:------------------:|
+| <img src="images/patchcore_metal_plate_good.png" width="200"/> | <img src="images/patchcore_metal_plate_scratches.png" width="200"/> | <img src="images/fastflow_metal_plate_good.png" width="200"/> | <img src="images/fastflow_metal_plate_scratches.png" width="200"/> |
