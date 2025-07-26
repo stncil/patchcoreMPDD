@@ -1,6 +1,6 @@
 # PatchCore Anomaly Detection Methods
 
-This repository implements multiple anomaly detection methods for industrial defect detection, specifically tested on the MPDD (Metal Parts Defect Detection) dataset. The methods focus on detecting and localizing defects in metal plates and bracket components.
+I have implemented multiple anomaly detection methods for industrial defect detection, and tested on the MPDD (Metal Parts Defect Detection) dataset.
 
 ## PatchCore Method
 
@@ -22,11 +22,11 @@ Specifically tuned for precise pixel-level localization using larger patch sizes
 
 ## FastFlow Method
 
-FastFlow is a normalizing flow-based generative model that learns the distribution of normal data to detect anomalies through likelihood estimation. The method uses coupling layers and invertible transformations to model the normal data distribution, enabling real-time inference with probabilistic anomaly scores. It excels at image-level classification tasks and provides faster training compared to memory-based approaches.
+FastFlow is a normalizing flow-based generative model that learns the distribution of normal data to detect anomalies through likelihood estimation. The method uses coupling layers and invertible transformations to model the normal data distribution, enabling real-time inference with probabilistic anomaly scores. It excels at image-level classification tasks.
 
 ### FastFlow Implementation
 
-The FastFlow implementation uses ResNet18 as the feature extractor backbone with configurable flow steps and hidden ratios. Class-specific hyperparameters are employed for different MPDD categories, with optimized learning rates, training epochs, and architectural parameters tailored to each defect type. The model supports both standard and improved variants with enhanced localization capabilities through post-processing techniques.
+The FastFlow implementation uses ResNet18 as the feature extractor backbone with configurable flow steps and hidden ratios. Class-specific hyperparameters are employed for different MPDD categories, with optimized learning rates, training epochs, and architectural parameters tailored to each defect type. The model supports both standard and improved variants(by changing the feature extractor, not experiemented here though) with enhanced localization capabilities.
 
 ## Usage
 

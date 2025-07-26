@@ -95,23 +95,28 @@ I have implemented multiple PatchCore variants, each optimized for different sce
 #### Backbone Comparison
 
 **WideResNet50 (Standard)**
-- ✅ **Fast inference** and training
-- ✅ **Good generalization** across defect types  
-- ✅ **Memory efficient**
-- ⚠️ May miss very subtle defects
+- **Fast inference** and training
+- **Good generalization** across defect types  
+- **Memory efficient**
+- May miss very subtle defects
 
 **Multi-Backbone Ensemble**
-- ✅ **Highest accuracy** through complementary features
-- ✅ **Robust to various defect types**
-- ✅ **Best overall performance**
-- ❌ **3x slower** inference and training
-- ❌ **Higher memory** requirements
+- **Highest accuracy** through complementary features
+- **Robust to various defect types**
+- **Best overall performance**
+- **3x slower** inference and training
+- **Higher memory** requirements
 
 **Resolution Impact (224×224 vs 320×320)**
 - **IM224**: Faster processing, good for real-time applications
 - **IM320**: Better fine-detail detection, preferred for quality control
 
 ## Performance Comparison
+
+I have used the following accuracy metrics:  
+Instance AUROC gauges image-level defect detection accuracy  
+Full Pixel AUROC reflects pixel-wise segmentation performance over all images  
+Anomaly Pixel AUROC captures pixel-wise accuracy only within images that actually contain defects.
 
 ### 1. Instance-Level AUROC (Image Classification)
 
