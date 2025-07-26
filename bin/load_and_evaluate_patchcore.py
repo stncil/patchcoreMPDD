@@ -36,9 +36,6 @@ def run(methods, results_path, gpu, seed, save_segmentation_images):
     os.makedirs(results_path, exist_ok=True)
 
     device = patchcore.utils.set_torch_device(gpu)
-    # Device context here is specifically set and used later
-    # because there was GPU memory-bleeding which I could only fix with
-    # context managers.
     device_context = (
         torch.cuda.device("cuda:{}".format(device.index))
         if "cuda" in device.type.lower()

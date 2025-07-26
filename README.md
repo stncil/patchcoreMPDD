@@ -234,3 +234,5 @@ bash sample_training_fastflow_improved.sh
 # Evaluation - Load and evaluate trained FastFlow models
 bash sample_evaluation_fastflow_loader.sh
 ```
+### Credits:
+The repository is adapted from https://github.com/amazon-science/patchcore-inspection

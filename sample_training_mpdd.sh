@@ -1,12 +1,8 @@
 #!/bin/bash
 export PYTHONPATH=src
-# Sample training script for MPDD (Metal Parts Defect Detection Dataset)
-# Make sure to update the datapath and datasets variables according to your MPDD setup
 
 datapath=/mnt/c/Users/akhil/All_my_codes/Portfolio/MPDD/anomaly_dataset_og
 
-# Update these according to your actual MPDD categories
-# These are example metal part categories - replace with actual ones from your dataset
 datasets=('metal_plate' 'bracket_white' 'bracket_brown' 'bracket_black')
 dataset_flags=($(for dataset in "${datasets[@]}"; do echo '-d '"${dataset}"; done))
 
