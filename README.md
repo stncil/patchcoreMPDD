@@ -1,6 +1,6 @@
 # MPDD Anomaly Detection: PatchCore vs FastFlow Comparison
 
-## Executive Summary
+## Summary
 
 A comprehensive comparison of **PatchCore** and **FastFlow** methods for anomaly detection on the MPDD (Metal Parts Defect Detection) dataset, focusing on bracket and metal plate inspection.
 
