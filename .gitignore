@@ -2,16 +2,6 @@
 __pycache__/
 LabletAnomaly.egg-info/
 
-# Model files and checkpoints
-*.pth
-*.pt
-*.ckpt
-*.pkl
-*.pickle
-*.h5
-*.hdf5
-*.safetensors
-
 # Result directories
 outputs/
 experiments/
