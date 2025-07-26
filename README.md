@@ -166,6 +166,15 @@ I have implemented multiple PatchCore variants, each optimized for different sce
 
 ### PatchCore Variants Setup
 
+#### All-in-One Training Script
+```bash
+# Run all PatchCore variants
+bash sample_training_mpdd.sh
+
+# Evaluation - Load and evaluate trained models
+bash sample_evaluation_mpdd.sh
+```
+
 #### Standard PatchCore (IM224_WR50)
 ```bash
 # Fast, balanced performance variant
@@ -207,15 +216,6 @@ patch_core -b wideresnet50 -le layer2 -le layer3 \
 sampler -p 0.01 approx_greedy_coreset dataset --resize 366 --imagesize 320 -d metal_plate -d bracket_white -d bracket_brown -d bracket_black mpdd $datapath
 ```
 
-#### All-in-One Training Script
-```bash
-# Run all PatchCore variants
-bash sample_training_mpdd.sh
-
-# Evaluation - Load and evaluate trained models
-bash sample_evaluation_mpdd.sh
-```
-
 ### FastFlow Setup
 ```bash
 # Training - Run FastFlow improved training
@@ -225,4 +225,7 @@ bash sample_training_fastflow_improved.sh
 # bash sample_training_fastflow.sh
 # bash sample_training_fastflow_patch.sh
 # bash sample_training_fastflow_wresnet50.sh
+
+# Evaluation - Load and evaluate trained FastFlow models
+bash sample_evaluation_fastflow_loader.sh
 ```
