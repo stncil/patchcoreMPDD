@@ -16,14 +16,6 @@ data/
 MPDD/
 MVTec/
 
-# Visualization outputs
-segmentation_images/
-*.jpg
-*.jpeg
-*.gif
-*.bmp
-*.tiff
-
 # CSV results (optional - uncomment if you don't want to track results)
 # *.csv
 
