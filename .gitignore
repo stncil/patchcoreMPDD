@@ -13,7 +13,6 @@ LabletAnomaly.egg-info/
 *.safetensors
 
 # Result directories
-results/
 outputs/
 experiments/
 logs/
@@ -21,15 +20,6 @@ runs/
 checkpoints/
 saved_models/
 
-# FastFlow specific results
-fastflow_results/
-fastflow_patch/
-fastflow_wresnet50/
-fastflow_improved/
-fastflow_patchbased/
-
-# PatchCore specific results
-patchcore_results/
 
 # Dataset directories (if large)
 data/
