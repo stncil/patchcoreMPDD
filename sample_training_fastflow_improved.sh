@@ -4,7 +4,7 @@ export PYTHONPATH=src
 # This version uses optimized hyperparameters for each MPDD category
 
 datapath=/mnt/c/Users/akhil/All_my_codes/Portfolio/MPDD/anomaly_dataset_og
-categories=("bracket_white")
+categories=("bracket_black")
 
 echo "=== Improved FastFlow Training with Class-Specific Parameters ==="
 echo "Data path: $datapath"

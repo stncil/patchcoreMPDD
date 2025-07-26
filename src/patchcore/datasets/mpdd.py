@@ -70,15 +70,15 @@ class MPDDDataset(torch.utils.data.Dataset):
 
         
         self.transform_img = [
-                # transforms.Resize(resize),
-                # transforms.CenterCrop(imagesize),
+                transforms.Resize(resize),
+                transforms.CenterCrop(imagesize),
                 transforms.ToTensor(),
                 transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD),
             ]
         self.transform_img = transforms.Compose(self.transform_img)
 
         self.transform_mask = [
-            # transforms.Resize(resize),
+            transforms.Resize(resize),
             transforms.CenterCrop(imagesize),
             transforms.ToTensor(),
         ]

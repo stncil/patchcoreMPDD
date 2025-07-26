@@ -63,11 +63,25 @@ def plot_segmentation_images(
 
         savename = image_path.split("/")
         savename = "_".join(savename[-save_depth:])
+        
+        # Add anomaly score to filename
+        if anomaly_score != "-1":
+            name_parts = savename.rsplit('.', 1)
+            if len(name_parts) == 2:
+                savename = f"{name_parts[0]}_score{float(anomaly_score):.3f}.{name_parts[1]}"
+            else:
+                savename = f"{savename}_score{float(anomaly_score):.3f}"
+        
         savename = os.path.join(savefolder, savename)
         f, axes = plt.subplots(1, 2 + int(masks_provided))
         axes[0].imshow(image.transpose(1, 2, 0))
         axes[1].imshow(mask.transpose(1, 2, 0))
         axes[2].imshow(segmentation)
+        
+        # Add anomaly score above the heatmap
+        if anomaly_score != "-1":
+            axes[2].set_title(f'Score: {float(anomaly_score):.3f}', fontsize=10)
+        
         f.set_size_inches(3 * (2 + int(masks_provided)), 3)
         f.tight_layout()
         f.savefig(savename)

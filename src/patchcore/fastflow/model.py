@@ -183,34 +183,6 @@ class FastFlow(nn.Module):
                 )
             )
         self.input_size = input_size
-        
-        # Initialize device tracking
-        self._device = None
-
-    @property
-    def device(self):
-        """Get the device of the model."""
-        if self._device is None:
-            self._device = next(self.parameters()).device
-        return self._device
-
-    def to(self, device):
-        """Override to method to track device changes."""
-        result = super().to(device)
-        result._device = device if isinstance(device, torch.device) else torch.device(device)
-        return result
-
-    def cuda(self, device=None):
-        """Override cuda method to track device changes."""
-        result = super().cuda(device)
-        result._device = torch.device('cuda', device) if device is not None else torch.device('cuda')
-        return result
-
-    def cpu(self):
-        """Override cpu method to track device changes."""
-        result = super().cpu()
-        result._device = torch.device('cpu')
-        return result
 
     def _extract_features(self, x):
         """Extract features from backbone."""
@@ -281,42 +253,19 @@ class FastFlow(nn.Module):
         for i, patches in enumerate(patch_features_list):
             # Reshape patches for flow processing: [B*N_patches, C, H, W]
             B, N_patches, C, H, W = patches.shape
+            patches_reshaped = patches.reshape(B * N_patches, C, H, W)
             
-            # Process patches in smaller chunks to avoid OOM
-            chunk_size = min(100, N_patches)  # Process max 100 patches at once
-            patch_output_chunks = []
+            # Process through normalizing flow
+            output, log_jac_dets = self.nf_flows[i](patches_reshaped)
             
-            for chunk_start in range(0, N_patches, chunk_size):
-                chunk_end = min(chunk_start + chunk_size, N_patches)
-                patch_chunk = patches[:, chunk_start:chunk_end]
-                
-                # Reshape chunk for flow processing
-                chunk_reshaped = patch_chunk.reshape(-1, C, H, W)
-                
-                # Process through normalizing flow
-                with torch.cuda.amp.autocast():  # Use mixed precision to save memory
-                    output, log_jac_dets = self.nf_flows[i](chunk_reshaped)
-                
-                # Compute loss for training
-                loss += torch.mean(
-                    0.5 * torch.sum(output**2, dim=(1, 2, 3)) - log_jac_dets
-                ) / (N_patches // chunk_size + 1)  # Scale loss by number of chunks
-                
-                # Reshape back to patch format and move to CPU immediately
-                output_reshaped = output.reshape(B, chunk_end - chunk_start, *output.shape[1:])
-                patch_output_chunks.append(output_reshaped.cpu())
-                
-                # Clear GPU memory immediately
-                del output, log_jac_dets, chunk_reshaped
-                torch.cuda.empty_cache()
+            # Compute loss for training
+            loss += torch.mean(
+                0.5 * torch.sum(output**2, dim=(1, 2, 3)) - log_jac_dets
+            )
             
-            # Concatenate chunks on CPU
-            patch_output = torch.cat(patch_output_chunks, dim=1)
-            patch_outputs.append(patch_output)
-            
-            # Clear intermediate data
-            del patch_output_chunks, patches
-            torch.cuda.empty_cache()
+            # Reshape back to patch format: [B, N_patches, ...]
+            output = output.reshape(B, N_patches, *output.shape[1:])
+            patch_outputs.append(output)
         
         return loss, patch_outputs, patch_shapes_list
 
@@ -341,11 +290,6 @@ class FastFlow(nn.Module):
         else:
             x = batch
         
-        # Ensure input is on the same device as the model
-        model_device = self.device
-        if x.device != model_device:
-            x = x.to(model_device)
-        
         # Extract features from backbone
         features = self._extract_features(x)
         
@@ -358,9 +302,6 @@ class FastFlow(nn.Module):
                 anomaly_maps_list = []
                 
                 for i, (patch_output, patch_shapes) in enumerate(zip(patch_outputs, patch_shapes_list)):
-                    # Move patch output back to GPU for computation
-                    patch_output = patch_output.to(self.device)
-                    
                     # Compute patch-level anomaly scores
                     patch_log_prob = -torch.mean(patch_output**2, dim=(2, 3, 4)) * 0.5
                     patch_scores = -patch_log_prob  # Convert to anomaly scores (higher = more anomalous)
@@ -370,14 +311,11 @@ class FastFlow(nn.Module):
                         patch_scores, patch_shapes, (self.input_size, self.input_size)
                     )
                     anomaly_maps_list.append(anomaly_map.unsqueeze(1))  # Add channel dim
-                    
-                    # Clean up intermediate tensors
-                    del patch_output, patch_log_prob, patch_scores, anomaly_map
                 
                 # Combine multi-scale anomaly maps
                 if len(anomaly_maps_list) > 1:
                     # Weight different scales differently
-                    weights = torch.softmax(torch.tensor([2.0, 1.5, 1.0], device=self.device), dim=0)
+                    weights = torch.softmax(torch.tensor([2.0, 1.5, 1.0], device=x.device), dim=0)
                     weights = weights[:len(anomaly_maps_list)]
                     
                     # Weighted combination

@@ -22,31 +22,31 @@ WEIGHT_DECAY = 1e-5
 CLASS_SPECIFIC_PARAMS = {
     "metal_plate": {
         "lr": 1e-2,
-        "num_epochs": 60,
+        "num_epochs": 6,
         "weight_decay": 1e-4,  # Increased for stability
         "flow_steps": 2,       # Reduced for stability
         "hidden_ratio": 1.0,
     },
     "bracket_white": {
-        "lr": 1e-2,
-        "num_epochs": 2,
+        "lr": 1e-3,
+        "num_epochs": 8,
         "weight_decay": 1e-4,
         "flow_steps": 2,
-        "hidden_ratio": 1.0,
+        "hidden_ratio": 0.8,
     },
     "bracket_brown": {
-        "lr": 1e-4,
-        "num_epochs": 150,
+        "lr": 1e-3,
+        "num_epochs": 10,
         "weight_decay": 1e-4,
         "flow_steps": 2,
-        "hidden_ratio": 2.0,
+        "hidden_ratio": 0.8,
     },
     "bracket_black": {
-        "lr": 9e-5,
-        "num_epochs": 30,
-        "weight_decay": 1e-3,
-        "flow_steps": 1,
-        "hidden_ratio": 0.6,
+        "lr": 1e-3,
+        "num_epochs": 25,
+        "weight_decay": 1e-4,
+        "flow_steps": 4,
+        "hidden_ratio": 1,
     },
     "default": {
         "lr": 1e-3,
